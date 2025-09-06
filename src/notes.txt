@@ -1,0 +1,26 @@
+# main: 
+    1- todo-list: 
+        # - 1 - the main ones that shown at the top of the todo-list section 
+        # - 2 - the secondary ones that I can see when i open there page or there tab or there window.
+        - 1 - the todos should be listed in order of there priority
+    2- remainders: 
+
+
+
+
+
+## Notes:
+    ~ when i checked the todo it marked down as finished and it will be removed from the todos to there
+    ~ finished todos
+     
+    ~ add priority for each todo when the user is adding them
+    
+    ~ the main page sho
+
+    ~ i need to add a feature like the one in github, the one that show much did i was in the year, the more 
+    ~ i mark down todos the color become more darker
+
+### what i wanted to do :
+    add a special color to each priority button and a backgroundColor in the jsx page, and in the css page 
+    i want to add an effect that make the backgroundColor disperse in the normal state but when i hover it 
+    the backgroundColor will be shown
