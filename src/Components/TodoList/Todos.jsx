@@ -25,6 +25,8 @@ const Todo = ({ todo, dispatch }) => {
           }}
         >
           {todo.name}
+          ''
+          {todo.repeat[0]}
         </p>
       </div>
 

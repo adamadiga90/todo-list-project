@@ -1,5 +1,7 @@
 .App {
   display: flex;
+  background-color: #02170c;
+  color: #d5fcea;
 }
 .side-bar {
   height: 100vh;

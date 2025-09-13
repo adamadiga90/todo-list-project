@@ -21,7 +21,6 @@ const Progress = ({ monthsDays }) => {
     let date = new Date();
     let today = date.getDay();
     let month = date.getMonth();
-    // console.log(month);
 
     let daysCount = 0;
     for (let i = month; i < monthsDays.length; i++) {
@@ -31,7 +30,7 @@ const Progress = ({ monthsDays }) => {
     return daysCount;
   }
   useEffect(() => {
-    console.log(checkDaysToEnd());
+    // console.log(checkDaysToEnd());
   }, []);
   return <div>Hello</div>;
 };
