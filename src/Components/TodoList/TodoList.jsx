@@ -2,18 +2,25 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 import Todo from "./Todos";
 import "./todolist.css";
 import "../../App.css";
+const daysData = JSON.parse(localStorage.getItem("days-and-to-end"));
+console.log(daysData);
+// let year = daysData ? daysData[1];
+// console.log(year);
+
+// const year = JSON.parse(localStorage.getItem("days-and-to-end"))[3] || [];
+// const daysOfYear = JSON.parse(localStorage.getItem("days-and-to-end"))[2] || [];
+// const daysCount = JSON.parse(localStorage.getItem("days-and-to-end"))[0] || [];
+// const daysToEndCount =
+//   JSON.parse(localStorage.getItem("days-and-to-end"))[1] || [];
+
 export const ACTIONS = {
   ADD_TODO: "add-note",
   TOGGLE_TODO: "toggle-todo",
   DELETE_TODO: "delete-todo",
 };
-const theDate = new Date();
-const date = theDate.getDate();
-const month = theDate.getMonth();
 function reducer(todos, action) {
   switch (action.type) {
     case ACTIONS.ADD_TODO: {
-      // return [...todos, newTodo(action.payload.name)];
       return updateLocalStorage(
         action.payload.name,
         action.payload.priority,
@@ -24,7 +31,11 @@ function reducer(todos, action) {
       return todos.map((todo) => {
         if (todo.id === action.payload.id) {
           if (todo.repeat === 1) {
-            return { ...todo, isComplete: !todo.isComplete };
+            return {
+              ...todo,
+              isComplete: !todo.isComplete,
+              // repeat: [1, daysOfYear, year],
+            };
           } else if (2 === 2) {
             return { ...todo, isComplete: !todo.isComplete };
           } else if (3 === 3) {
@@ -47,6 +58,7 @@ function reducer(todos, action) {
       });
   }
 }
+function toggleFunction() {}
 function updateLocalStorage(name, priority, repeat) {
   const oldLocal = JSON.parse(localStorage.getItem("todos")) || [];
   let newLocal = [
@@ -67,7 +79,6 @@ const TodoList = () => {
     reducer,
     JSON.parse(localStorage.getItem("todos")) || []
   );
-  console.log(month, date);
 
   const [name, setName] = useState("");
   const [counter, setCounter] = useState(0);
@@ -76,6 +87,9 @@ const TodoList = () => {
   const [priorityVisible, setPriorityVisible] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const priorityRef = useRef(null);
+
+  console.log(todos);
+
   function handleSubmit(e) {
     e.preventDefault();
     if (name && name.length > 0) {
@@ -85,7 +99,7 @@ const TodoList = () => {
         payload: {
           name: name,
           priority: priority,
-          repeat: [repeat, month, date],
+          // repeat: [repeat, daysCount, daysOfYear, year],
         },
       });
     }
@@ -124,11 +138,38 @@ const TodoList = () => {
       document.removeEventListener("click", handlePriorityClick);
     };
   }, [priorityVisible]);
+
+  // function checkRepeatedTodos() {
+  //   let allTodos = JSON.parse(localStorage.getItem("todos"));
+  //   // console.log(allTodos);
+  //   allTodos.map((todo) => {
+  //     if (todo.repeat[0] === "1") {
+  //       if (todo.repeat[2] + 1 <= date || todo.repeat[1] < month) {
+  //         console.log(todo.name);
+  //         todo.isComplete = false;
+  //       }
+  //     } else if (todo.repeat[0] === "2") {
+  //       if (todo.repeat[2] + 2 <= date || todo.repeat[1] < month) {
+  //         console.log(todo.name);
+  //         todo.isComplete = false;
+  //       }
+  //     } else if (todo.repeat[0] === "3") {
+  //       if (todo.repeat[2] + 3 <= date || todo.repeat[1] < month) {
+  //         console.log(todo.name);
+  //         todo.isComplete = false;
+  //       }
+  //     }
+  //   });
+  //   localStorage.setItem("todos", JSON.stringify(allTodos));
+  //   // console.log(allTodos);
+  // }
   useEffect(() => {
     if (todos.length > 0) {
       localStorage.setItem("todos", JSON.stringify(todos));
     }
+    // checkRepeatedTodos();
   }, [todos, localStorage]);
+
   return (
     <div className="todo-list-container">
       <div className="form-container">

@@ -16,21 +16,27 @@ const Progress = ({ monthsDays }) => {
   for (let i = 0; i < monthsDays.length; i++) {
     days += monthsDays[i];
   }
-  //   console.log(days);
-  function checkDaysToEnd() {
-    let date = new Date();
-    let today = date.getDay();
-    let month = date.getMonth();
 
-    let daysCount = 0;
+  function checkDaysAndToEnd() {
+    let theDate = new Date();
+    let today = theDate.getDay();
+    let month = theDate.getMonth();
+    let date = theDate.getDate();
+    let year = theDate.getFullYear();
+    let daysToEndCount = 0;
     for (let i = month; i < monthsDays.length; i++) {
-      daysCount += monthsDays[i];
+      daysToEndCount += monthsDays[i];
     }
-    daysCount = daysCount - today;
-    return daysCount;
+
+    daysToEndCount = daysToEndCount - date;
+    let daysCount = 365 - daysToEndCount;
+
+    return [daysCount, daysToEndCount, days, year];
   }
+
   useEffect(() => {
-    // console.log(checkDaysToEnd());
+    let daysAndToEnd = checkDaysAndToEnd();
+    localStorage.setItem("days-and-to-end", JSON.stringify(daysAndToEnd));
   }, []);
   return <div>Hello</div>;
 };

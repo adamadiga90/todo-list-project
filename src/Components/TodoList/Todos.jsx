@@ -26,7 +26,7 @@ const Todo = ({ todo, dispatch }) => {
         >
           {todo.name}
           ''
-          {todo.repeat[0]}
+          {todo.repeat[0]}/{todo.repeat[1]}
         </p>
       </div>
 

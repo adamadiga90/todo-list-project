@@ -8,6 +8,7 @@ const App = () => {
   const [monthsDays, setMonthsDays] = useState([
     31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
   ]);
+
   useEffect(() => {
     checkLeapYear();
     checkDay();
