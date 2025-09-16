@@ -3,7 +3,12 @@ import { ACTIONS } from "./TodoList";
 import { FaRegTrashCan } from "react-icons/fa6";
 const Todo = ({ todo, dispatch }) => {
   function handleToggle() {
-    dispatch({ type: ACTIONS.TOGGLE_TODO, payload: { id: todo.id } });
+    dispatch({
+      type: ACTIONS.TOGGLE_TODO,
+      payload: {
+        id: todo.id,
+      },
+    });
   }
   function handleDelete() {
     dispatch({ type: ACTIONS.DELETE_TODO, payload: { id: todo.id } });
@@ -26,7 +31,7 @@ const Todo = ({ todo, dispatch }) => {
         >
           {todo.name}
           ''
-          {todo.repeat[0]}/{todo.repeat[1]}
+          {/* {todo.repeat[0]}/{todo.repeat[1]} */}
         </p>
       </div>
 

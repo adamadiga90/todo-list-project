@@ -2,8 +2,9 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 import Todo from "./Todos";
 import "./todolist.css";
 import "../../App.css";
+import { useCheckDaysToEnd } from "../../AppContext";
 const daysData = JSON.parse(localStorage.getItem("days-and-to-end"));
-console.log(daysData);
+// console.log(daysData);
 // let year = daysData ? daysData[1];
 // console.log(year);
 
@@ -17,6 +18,7 @@ export const ACTIONS = {
   ADD_TODO: "add-note",
   TOGGLE_TODO: "toggle-todo",
   DELETE_TODO: "delete-todo",
+  UPDATE_TODOS: "update-todos",
 };
 function reducer(todos, action) {
   switch (action.type) {
@@ -27,25 +29,11 @@ function reducer(todos, action) {
         action.payload.repeat
       );
     }
+    case ACTIONS.UPDATE_TODOS:
+      return JSON.parse(localStorage.getItem("todos"));
+
     case ACTIONS.TOGGLE_TODO:
-      return todos.map((todo) => {
-        if (todo.id === action.payload.id) {
-          if (todo.repeat === 1) {
-            return {
-              ...todo,
-              isComplete: !todo.isComplete,
-              // repeat: [1, daysOfYear, year],
-            };
-          } else if (2 === 2) {
-            return { ...todo, isComplete: !todo.isComplete };
-          } else if (3 === 3) {
-            return { ...todo, isComplete: !todo.isComplete };
-          } else {
-            return { ...todo, isComplete: !todo.isComplete };
-          }
-        }
-        return todo;
-      });
+      return toggleFunction(todos, action.payload.id);
     case ACTIONS.DELETE_TODO:
       if (
         localStorage.getItem("todos") &&
@@ -58,7 +46,17 @@ function reducer(todos, action) {
       });
   }
 }
-function toggleFunction() {}
+function toggleFunction(todos, id) {
+  return todos.map((todo) => {
+    if (todo.id === id) {
+      return {
+        ...todo,
+        isComplete: !todo.isComplete,
+      };
+    }
+    return todo;
+  });
+}
 function updateLocalStorage(name, priority, repeat) {
   const oldLocal = JSON.parse(localStorage.getItem("todos")) || [];
   let newLocal = [
@@ -85,10 +83,17 @@ const TodoList = () => {
   const [windowVisible, setWindowVisible] = useState(false);
   const [priority, setPriority] = useState(3);
   const [priorityVisible, setPriorityVisible] = useState(false);
+  const [repeatVisible, setRepeatVisible] = useState(false);
   const [repeat, setRepeat] = useState(false);
-  const priorityRef = useRef(null);
 
-  console.log(todos);
+  const priorityRef = useRef(null);
+  const repeatRef = useRef(null);
+
+  const daysAndToEnd = useCheckDaysToEnd();
+  const daysCount = daysAndToEnd[0];
+  const daysToEndCount = daysAndToEnd[1];
+  const daysOfYear = daysAndToEnd[2];
+  const year = daysAndToEnd[3];
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -99,24 +104,21 @@ const TodoList = () => {
         payload: {
           name: name,
           priority: priority,
-          // repeat: [repeat, daysCount, daysOfYear, year],
+          repeat: [repeat, daysCount, daysOfYear, year],
         },
       });
     }
     setName("");
     setPriority(3);
     setWindowVisible(false);
-    setPriorityVisible(false);
   }
   function handleP1Click() {
     setPriority(1);
     setWindowVisible(false);
-    setPriorityVisible(false);
   }
   function handleP2Click() {
     setPriority(2);
     setPriorityVisible(false);
-    setWindowVisible(false);
   }
   function handleP3Click() {
     setPriority(3);
@@ -137,37 +139,54 @@ const TodoList = () => {
     return () => {
       document.removeEventListener("click", handlePriorityClick);
     };
-  }, [priorityVisible]);
+  }, [priorityVisible, repeatVisible]);
 
-  // function checkRepeatedTodos() {
-  //   let allTodos = JSON.parse(localStorage.getItem("todos"));
-  //   // console.log(allTodos);
-  //   allTodos.map((todo) => {
-  //     if (todo.repeat[0] === "1") {
-  //       if (todo.repeat[2] + 1 <= date || todo.repeat[1] < month) {
-  //         console.log(todo.name);
-  //         todo.isComplete = false;
-  //       }
-  //     } else if (todo.repeat[0] === "2") {
-  //       if (todo.repeat[2] + 2 <= date || todo.repeat[1] < month) {
-  //         console.log(todo.name);
-  //         todo.isComplete = false;
-  //       }
-  //     } else if (todo.repeat[0] === "3") {
-  //       if (todo.repeat[2] + 3 <= date || todo.repeat[1] < month) {
-  //         console.log(todo.name);
-  //         todo.isComplete = false;
-  //       }
-  //     }
-  //   });
-  //   localStorage.setItem("todos", JSON.stringify(allTodos));
-  //   // console.log(allTodos);
-  // }
+  function checkRepeatedTodos() {
+    let allTodos = JSON.parse(localStorage.getItem("todos"));
+    if (allTodos && allTodos.length > 0) {
+      allTodos.map((todo) => {
+        if (todo.repeat[3] !== year && todo.repeat[0]) {
+          todo.isComplete = false;
+        }
+        if (todo.repeat[0] === "1") {
+          if (todo.repeat[1] + 1 <= daysCount) {
+            console.log(todo.isComplete);
+
+            todo.repeat[1] = daysCount;
+            todo.isComplete = false;
+          }
+          console.log(todo.repeat[0]);
+        } else if (todo.repeat[0] === "2") {
+          if (todo.repeat[1] + 2 <= daysCount) {
+            console.log(todo.isComplete);
+
+            todo.repeat[1] = daysCount;
+            todo.isComplete = false;
+          }
+        } else if (todo.repeat[0] === "3") {
+          if (todo.repeat[1] + 3 <= daysCount) {
+            console.log(todo.isComplete);
+
+            todo.repeat[1] = daysCount;
+            todo.isComplete = false;
+          }
+        }
+      });
+    }
+    console.log(allTodos);
+    localStorage.setItem("todos", JSON.stringify(allTodos));
+    console.log(JSON.parse(localStorage.getItem("todos")));
+  }
   useEffect(() => {
-    if (todos.length > 0) {
+    setTimeout(() => {
+      checkRepeatedTodos();
+      dispatch({ type: ACTIONS.UPDATE_TODOS });
+    }, 10);
+  }, []);
+  useEffect(() => {
+    if (todos && todos.length > 0) {
       localStorage.setItem("todos", JSON.stringify(todos));
     }
-    // checkRepeatedTodos();
   }, [todos, localStorage]);
 
   return (
@@ -226,12 +245,65 @@ const TodoList = () => {
             ) : null}
           </div>
           <div className="repeat">
-            <p>Repeat</p>
-            <div className="repeat-buttons">
-              <button onClick={() => setRepeat("1")}>Every Day</button>
-              <button onClick={() => setRepeat("2")}>Every 2 Days</button>
-              <button onClick={() => setRepeat("3")}>Every 3 Days</button>
-            </div>
+            <button
+              className="priority-button"
+              ref={repeatRef}
+              onClick={(e) => {
+                e.stopPropagation();
+                setRepeatVisible(true);
+              }}
+            >
+              Set Repeat
+            </button>
+            {repeatVisible ? (
+              <div className="priority-buttons">
+                <button
+                  style={{
+                    color: "#fb4141",
+                    border: "1px solid #fb4141",
+                    padding: "0",
+                    fontWeight: "bold",
+                    width: "60px",
+                  }}
+                  onClick={() => {
+                    setRepeat("1");
+                    setPriorityVisible(false);
+                  }}
+                >
+                  Every Day
+                </button>
+                <button
+                  style={{
+                    color: "#ff9a00",
+                    border: "1px solid #ff9a00",
+                    padding: "0",
+                    fontWeight: "bold",
+                    width: "60px",
+                  }}
+                  onClick={() => {
+                    setRepeat("2");
+                    setPriorityVisible(false);
+                  }}
+                >
+                  Every 2 Days
+                </button>
+                <button
+                  style={{
+                    color: "#5cb338",
+                    border: "1px solid #5cb338",
+                    padding: "0",
+                    fontWeight: "bold",
+                    width: "60px",
+                  }}
+                  onClick={() => {
+                    setRepeat("3");
+                    setPriorityVisible(false);
+                  }}
+                >
+                  Every 3 Days
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

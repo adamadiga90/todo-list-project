@@ -49,6 +49,7 @@
   top: calc(50% + 12.5px);
   right: calc(12.5vw - 125px);
   width: 250px;
+  height: 120px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -60,28 +61,36 @@
   align-items: center;
   padding: 5px;
 }
-.todo-list-container .dots-window-container .priority .priority-button {
+
+.todo-list-container .dots-window-container .repeat {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+.todo-list-container .dots-window-container .priority-button {
   font-weight: bold;
   background-color: var(--primary-color);
   font-size: 20px;
   border: none;
   cursor: pointer;
-  margin-top: 10px;
+  width: 150px;
 }
-.todo-list-container .dots-window-container .priority .priority-buttons {
+.todo-list-container .dots-window-container .priority-buttons {
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  left: calc(100% + 50px);
+  left: calc(100% + 40px);
   background-color: var(--primary-color);
   border: 3px solid var(--secondary-color);
   width: calc(100% + 50px);
-  height: calc(100% - 6px);
+  height: calc(100% + 6px);
   border-radius: 10px;
 }
-.todo-list-container .dots-window-container .priority .priority-buttons button {
+.todo-list-container .dots-window-container .priority-buttons button {
   border: none;
   transition: 0.3s;
   cursor: pointer;
@@ -111,6 +120,34 @@
 .todo-list-container
   .dots-window-container
   .priority
+  .priority-buttons
+  button:nth-child(3):hover {
+  background-color: #5cb338;
+}
+.todo-list-container
+  .dots-window-container
+  .repeat
+  .priority-buttons
+  button:hover {
+  color: black !important;
+}
+.todo-list-container
+  .dots-window-container
+  .repeat
+  .priority-buttons
+  button:nth-child(1):hover {
+  background-color: #fb4141;
+}
+.todo-list-container
+  .dots-window-container
+  .repeat
+  .priority-buttons
+  button:nth-child(2):hover {
+  background-color: #ece852;
+}
+.todo-list-container
+  .dots-window-container
+  .repeat
   .priority-buttons
   button:nth-child(3):hover {
   background-color: #5cb338;
