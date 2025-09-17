@@ -52,6 +52,13 @@ const AppContextProvider = ({ children }) => {
     let month = theDate.getMonth();
     let date = theDate.getDate();
     let year = theDate.getFullYear();
+    let dateIn = JSON.stringify(theDate);
+    let newDate = dateIn.split(":")[0];
+    console.log(newDate.slice(0, newDate.length - 3));
+    let name = "Adam";
+
+    // console.log(name.slice(name.length - 2, name.length));
+
     let daysToEndCount = 0;
     for (let i = month; i < monthsDays.length; i++) {
       daysToEndCount += monthsDays[i];

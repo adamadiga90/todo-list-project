@@ -150,32 +150,23 @@ const TodoList = () => {
         }
         if (todo.repeat[0] === "1") {
           if (todo.repeat[1] + 1 <= daysCount) {
-            console.log(todo.isComplete);
-
             todo.repeat[1] = daysCount;
             todo.isComplete = false;
           }
-          console.log(todo.repeat[0]);
         } else if (todo.repeat[0] === "2") {
           if (todo.repeat[1] + 2 <= daysCount) {
-            console.log(todo.isComplete);
-
             todo.repeat[1] = daysCount;
             todo.isComplete = false;
           }
         } else if (todo.repeat[0] === "3") {
           if (todo.repeat[1] + 3 <= daysCount) {
-            console.log(todo.isComplete);
-
             todo.repeat[1] = daysCount;
             todo.isComplete = false;
           }
         }
       });
     }
-    console.log(allTodos);
     localStorage.setItem("todos", JSON.stringify(allTodos));
-    console.log(JSON.parse(localStorage.getItem("todos")));
   }
   useEffect(() => {
     setTimeout(() => {
@@ -307,6 +298,7 @@ const TodoList = () => {
           </div>
         </div>
       </div>
+      <h1>Todo-List</h1>
       <div className=" not-completed-todo-list">
         {JSON.parse(localStorage.getItem("todos")) &&
         JSON.parse(localStorage.getItem("todos")).length &&
